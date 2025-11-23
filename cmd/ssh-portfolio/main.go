@@ -1,13 +1,19 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 
 	sshserver "github.com/Shbhom/ssh-portfolio/internal/ssh-server"
 )
 
 func main() {
-	addr := ":23234"
+	port := flag.Int("port", 22, "port on which wish ssh will run")
+
+	flag.Parse()
+
+	addr := fmt.Sprintf(":%d", *port)
 	hostKeyPath := "ssh_host_ed25519"
 
 	srv, err := sshserver.New(addr, hostKeyPath)
