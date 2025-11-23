@@ -261,8 +261,4 @@ You can change the wording and data freely as long as the structure stays the sa
 ## Credits
 
 * Inspired by **terminal.shop**, which showed how fun SSH-based UIs can be.
-* Built with tons of help from the **Charmbracelet** ecosystem and open source tools.
-
-```
-::contentReference[oaicite:0]{index=0}
-```
+* Built with tons of help from the [**Charmbracelet**](https://charm.land/) ecosystem and open source tools.
