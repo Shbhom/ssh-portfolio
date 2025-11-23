@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/charmbracelet/lipgloss"
 )
@@ -27,7 +27,7 @@ func (m model) viewTabContent() string {
 
 	switch m.activeTab {
 	case 0:
-		text = fmt.Sprintf("%s\n%s\n%s\n", m.portfolio.Name, m.portfolio.Tagline, m.portfolio.Overview.Intro)
+		text = m.viewOverview()
 	case 1:
 		text = "Experience tab — placeholder content."
 	case 2:
@@ -109,4 +109,82 @@ func (m model) View() string {
 		lipgloss.Center, // vertical
 		content,
 	)
+}
+
+const (
+	esc = "\x1b"
+	bel = "\x07"
+)
+
+func termLink(label, url string) string {
+	if url == "" {
+		return label
+	}
+	// OSC 8 ; ; url ST   label   OSC 8 ; ; ST
+	return esc + "]8;;" + url + bel + label + esc + "]8;;" + bel
+}
+
+func centerInContent(s string) string {
+	innerWidth := appWidth - 4 // same width you use in contentStyle
+	return lipgloss.PlaceHorizontal(innerWidth, lipgloss.Center, s)
+}
+
+func (m model) viewOverview() string {
+	if m.portfolio == nil {
+		return "Overview not available."
+	}
+
+	p := m.portfolio
+
+	var lines []string
+
+	// 1) Name
+	nameLine := centerInContent(m.nameStyle.Render(p.Name))
+	lines = append(lines, nameLine)
+
+	// 2) Tagline (slightly dimmer / separate style if you want)
+	taglineStyle := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#DDDDDD"))
+	taglineLine := centerInContent(taglineStyle.Render(p.Tagline))
+	lines = append(lines, taglineLine)
+
+	// Blank line
+	lines = append(lines, "")
+
+	// 3) Intro paragraph
+	if intro := strings.TrimSpace(p.Overview.Intro); intro != "" {
+		lines = append(lines, intro)
+		lines = append(lines, "") // blank after intro
+	}
+
+	// 4) Bullets like "Backend: ...", "Infra: ...", etc.
+	for _, b := range p.Overview.Bullets {
+		b = strings.TrimSpace(b)
+		if b == "" {
+			continue
+		}
+		lines = append(lines, "• "+b)
+	}
+
+	// 5) Social links line at the bottom of the content box
+	// inside viewOverview
+	var socialParts []string
+
+	if p.Contact.GitHub != "" {
+		socialParts = append(socialParts, termLink("Github", p.Contact.GitHub))
+	}
+	if p.Contact.LinkedIn != "" {
+		socialParts = append(socialParts, termLink("Linkedin", p.Contact.LinkedIn))
+	}
+	if p.Contact.Email != "" {
+		socialParts = append(socialParts, termLink("Email", "mailto:"+p.Contact.Email))
+	}
+
+	if len(socialParts) > 0 {
+		lines = append(lines, "")
+		socialLine := strings.Join(socialParts, "  ·  ")
+		lines = append(lines, centerInContent(socialLine))
+	}
+
+	return strings.Join(lines, "\n")
 }

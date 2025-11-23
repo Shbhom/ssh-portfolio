@@ -11,7 +11,7 @@ import (
 
 const (
 	pauseTicks = 10 // ~1 second at 70ms per tick
-	appWidth   = 80
+	appWidth   = 100
 	appHeight  = 20
 )
 
