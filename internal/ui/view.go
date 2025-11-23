@@ -32,7 +32,7 @@ func (m model) viewTabContent() string {
 	case 1:
 		text = contentStyle.Render(m.viewExperience())
 	case 2:
-		text = "Projects tab — placeholder content."
+		text = contentStyle.Render(m.viewProjects())
 	case 3:
 		text = "Contact tab — placeholder content."
 	}
@@ -260,6 +260,76 @@ func (m model) viewExperience() string {
 	pagerLine := fmt.Sprintf("(%d/%d)", idx+1, len(exps))
 	// use paginator's dots + our numeric info
 	pagerView := m.expList.View()
+	lines = append(lines, pagerLine+"  "+pagerView)
+
+	return strings.Join(lines, "\n")
+}
+
+func (m model) viewProjects() string {
+	if len(m.portfolio.Projects) == 0 || m.portfolio.Projects == nil {
+		return "no projects data"
+	}
+
+	projs := m.portfolio.Projects
+
+	var lines []string
+
+	idx := m.projList.Page
+
+	if idx < 0 {
+		idx = 0
+	}
+	if idx >= len(projs) {
+		idx = len(projs) - 1
+	}
+	proj := projs[idx]
+
+	header := lipgloss.NewStyle().Bold(true).Render(proj.Name)
+	lines = append(lines, header)
+
+	lines = append(lines, "")
+
+	// Bullets (cap at 3 for readability)
+	maxBullets := 3
+	for i, b := range proj.Bullets {
+		if i >= maxBullets {
+			break
+		}
+		b = strings.TrimSpace(b)
+		if b == "" {
+			continue
+		}
+		lines = append(lines, "• "+b)
+	}
+
+	// Stack line
+	if strings.TrimSpace(proj.Stack) != "" {
+		lines = append(lines, "")
+		stackLine := "Stack: " + proj.Stack
+		lines = append(lines, stackLine)
+	}
+	lines = append(lines, " ")
+
+	linksParts := []string{}
+
+	if proj.Links.Code != "" {
+		linksParts = append(linksParts, termLink("Code", proj.Links.Code))
+	}
+	if proj.Links.Demo != "" {
+		linksParts = append(linksParts, termLink("Demo", proj.Links.Demo))
+	}
+
+	if len(linksParts) > 0 {
+		lines = append(lines, "")
+		linkLine := strings.Join(linksParts, "  ·  ")
+		lines = append(lines, linkLine)
+	}
+
+	// Paginator indicator at bottom
+	lines = append(lines, "")
+	pagerLine := fmt.Sprintf("(%d/%d)", idx+1, len(projs))
+	// use paginator's dots + our numeric info
+	pagerView := m.projList.View()
 	lines = append(lines, pagerLine+"  "+pagerView)
 
 	return strings.Join(lines, "\n")

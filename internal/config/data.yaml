@@ -76,11 +76,29 @@ experience:
 
 projects:
 - name: "SSH Portfolio TUI"
-  tags: [ "Go", "Wish", "Bubble Tea" ]
-  summary: "Terminal-based interactive portfolio over SSH."
+  bullets:
+  - "Terminal-based portfolio accessible over SSH."
+  - "Built with Wish and Bubble Tea, featuring tabs and intro animation."
+  - "Showcases backend, infra and terminal UX skills."
+  stack: "Go, Wish, Bubble Tea, Docker"
+  links:
+    code: "https://github.com/shbhom"
+
 - name: "Drone Platform Backend"
-  tags: [ "Go", "Postgres", "Redis" ]
-  summary: "Backend for drone telemetry and control."
+  bullets:
+  - "APIs and data pipelines for drone telemetry and control."
+  - "Designed for on-field use with real drone missions."
+  stack: "Go, Postgres, Redis, Docker"
+  links:
+    code: "https://github.com/shbhom"
+
+- name: "Local-only internal tool"
+  bullets:
+  - "CLI/TUI tool used internally, not deployed publicly."
+  stack: "Go, SQLite"
+  links:
+    code: "https://github.com/shbhom"
+    demo: "https://hornet.technology"
 
 contact:
   email: "shbhomsrivastav@gmail.com"

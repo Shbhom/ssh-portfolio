@@ -14,10 +14,16 @@ type Experience struct {
 	Stack    string   `yaml:"stack"`
 }
 
+type ProjectLinks struct {
+	Code string `yaml:"code"`
+	Demo string `yaml:"demo"`
+}
+
 type Project struct {
-	Name    string   `yaml:"name"`
-	Tags    []string `yaml:"tags"`
-	Summary string   `yaml:"summary"`
+	Name    string       `yaml:"name"`
+	Bullets []string     `yaml:"bullets"`
+	Stack   string       `yaml:"stack"`
+	Links   ProjectLinks `yaml:"links"`
 }
 
 type Contact struct {

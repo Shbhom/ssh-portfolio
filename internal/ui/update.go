@@ -17,6 +17,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.expList.PrevPage()
 			}
 		}
+		if m.activeTab == 2 { // assuming 0=Overview, 1=Experience
+			switch msg.String() {
+			case "j", "down":
+				m.projList.NextPage()
+			case "k", "up":
+				m.projList.PrevPage()
+			}
+		}
 		switch msg.String() {
 		case "1":
 			m.activeTab = 0

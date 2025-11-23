@@ -42,20 +42,13 @@ type model struct {
 	activeTab int // 0 = Overview, 1 = Experience, 2 = Projects, 3 = Contact
 	portfolio *portfolio.Portfolio
 	expList   paginator.Model
+	projList  paginator.Model
 }
 
 func NewModel(userName string, p *portfolio.Portfolio) model {
 
-	// expPager :=
-	// expPager.Type = paginator.Dots
-	// expPager.PerPage = 1
-	// if len(p.Experiences) == 0 {
-	// 	expPager.SetTotalPages(1)
-	// } else {
-	// 	expPager.SetTotalPages(len(p.Experiences))
-	// }
-
 	expPager := newPaginator(len(p.Experiences))
+	projPager := newPaginator(len(p.Projects))
 
 	return model{
 		username:   userName,
@@ -74,6 +67,7 @@ func NewModel(userName string, p *portfolio.Portfolio) model {
 		cursorStyle: cursorStyle,
 		portfolio:   p,
 		expList:     expPager,
+		projList:    projPager,
 	}
 }
 
