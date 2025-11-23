@@ -134,7 +134,10 @@ func newModel(userName string) model {
 }
 
 func (m model) Init() tea.Cmd {
-	return tickCmd()
+	return tea.Batch(
+		tickCmd(), // your progress timer
+		tea.SetWindowTitle("Shubhom's Portfolio"), // 👈 window title
+	)
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
