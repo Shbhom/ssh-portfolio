@@ -43,6 +43,11 @@ var (
 			Width(appWidth).
 			Foreground(lipgloss.Color("#555555")).
 			Align(lipgloss.Center)
+	contactTitleStyle = lipgloss.NewStyle().
+				Bold(true).
+				Foreground(lipgloss.Color("#FFD7FF")). // soft pink, same vibe as tabs
+				MarginBottom(1).
+				Underline(false)
 )
 
 func newPaginator(total int) paginator.Model {

@@ -34,7 +34,7 @@ func (m model) viewTabContent() string {
 	case 2:
 		text = contentStyle.Render(m.viewProjects())
 	case 3:
-		text = "Contact tab — placeholder content."
+		text = contentStyle.Render(m.viewContact())
 	}
 
 	return contentStyle.Render(text)
@@ -175,23 +175,23 @@ func (m model) viewOverview() string {
 
 	// 5) Social links line at the bottom of the content box
 	// inside viewOverview
-	var socialParts []string
+	// var socialParts []string
 
-	if p.Contact.GitHub != "" {
-		socialParts = append(socialParts, termLink("GitHub", p.Contact.GitHub))
-	}
-	if p.Contact.LinkedIn != "" {
-		socialParts = append(socialParts, termLink("LinkedIn", p.Contact.LinkedIn))
-	}
-	if p.Contact.Email != "" {
-		socialParts = append(socialParts, termLink("Email", "mailto:"+p.Contact.Email))
-	}
+	// if p.Contact.GitHub != "" {
+	// 	socialParts = append(socialParts, termLink("GitHub", p.Contact.GitHub))
+	// }
+	// if p.Contact.LinkedIn != "" {
+	// 	socialParts = append(socialParts, termLink("LinkedIn", p.Contact.LinkedIn))
+	// }
+	// if p.Contact.Email != "" {
+	// 	socialParts = append(socialParts, termLink("Email", "mailto:"+p.Contact.Email))
+	// }
 
-	if len(socialParts) > 0 {
-		lines = append(lines, "")
-		socialLine := strings.Join(socialParts, "  ·  ")
-		lines = append(lines, centerInContent(socialLine))
-	}
+	// if len(socialParts) > 0 {
+	// 	lines = append(lines, "")
+	// 	socialLine := strings.Join(socialParts, "  ·  ")
+	// 	lines = append(lines, centerInContent(socialLine))
+	// }
 
 	return strings.Join(lines, "\n")
 }
@@ -331,6 +331,66 @@ func (m model) viewProjects() string {
 	// use paginator's dots + our numeric info
 	pagerView := m.projList.View()
 	lines = append(lines, pagerLine+"  "+pagerView)
+
+	return strings.Join(lines, "\n")
+}
+
+// func (m model) viewContact() string {
+
+// 	p := m.portfolio
+
+// 	var lines []string
+
+// 	header := lipgloss.NewStyle().Bold(true).Render("Let's Work Together")
+// 	lines = append(lines, centerInContent(header))
+
+// 	var socialParts []string
+
+// 	if p.Contact.GitHub != "" {
+// 		socialParts = append(socialParts, termLink("GitHub", p.Contact.GitHub))
+// 	}
+// 	if p.Contact.LinkedIn != "" {
+// 		socialParts = append(socialParts, termLink("LinkedIn", p.Contact.LinkedIn))
+// 	}
+// 	if p.Contact.Email != "" {
+// 		socialParts = append(socialParts, termLink("Email", "mailto:"+p.Contact.Email))
+// 	}
+// 	if p.Contact.Phone != "" {
+// 		socialParts = append(socialParts, p.Contact.Phone)
+// 	}
+
+// 	if len(socialParts) > 0 {
+// 		lines = append(lines, "")
+// 		socialLine := strings.Join(socialParts, "  ·  ")
+// 		lines = append(lines, centerInContent(socialLine))
+// 	}
+
+// 	return strings.Join(lines, "\n")
+
+// }
+
+func (m model) viewContact() string {
+	title := centerInContent(contactTitleStyle.Render("Let's Work Together"))
+
+	// Build individual items
+	items := []string{
+		termLink("GitHub", m.portfolio.Contact.GitHub),
+		termLink("LinkedIn", m.portfolio.Contact.LinkedIn),
+		termLink("Email", "mailto:"+m.portfolio.Contact.Email),
+		m.portfolio.Contact.Phone, // plain text, no link
+	}
+
+	var lines []string
+	lines = append(lines, title) // title + blank line
+	lines = append(lines, centerInContent("I usually reply within 24–48 hours."), "")
+
+	// Center each contact item on its own line
+	for _, item := range items {
+		if strings.TrimSpace(item) == "" {
+			continue
+		}
+		lines = append(lines, centerInContent(item), "")
+	}
 
 	return strings.Join(lines, "\n")
 }

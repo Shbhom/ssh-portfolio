@@ -84,23 +84,56 @@ projects:
   links:
     code: "https://github.com/shbhom"
 
-- name: "Drone Platform Backend"
+- name: "Financial RAG Chatbot for Dataknobs"
   bullets:
-  - "APIs and data pipelines for drone telemetry and control."
-  - "Designed for on-field use with real drone missions."
-  stack: "Go, Postgres, Redis, Docker"
-  links:
-    code: "https://github.com/shbhom"
+  - "Finance-focused RAG chatbot enabling fund managers to query complex financial data and automate key workflows."
+  - "Designed an ETL pipeline using Redis and message queues to fully automate financial report extraction and processing."
+  - "Enabled fund managers to access cleaned financial data roughly 5x faster for downstream analysis."
+  stack: "TypeScript, LangChain, Redis, Message Queues, Docker"
+  links: {}
 
-- name: "Local-only internal tool"
+- name: "Vyomchara RAG Chatbot & Hyperspectral Platform"
   bullets:
-  - "CLI/TUI tool used internally, not deployed publicly."
-  stack: "Go, SQLite"
-  links:
-    code: "https://github.com/shbhom"
-    demo: "https://hornet.technology"
+  - "Developed and deployed a RAG-based chatbot and a hyperspectral imaging platform at Vyomchara."
+  - "Containerised backend APIs and AI models with Docker and Kubernetes for reliable deployment and management."
+  - "Improved unstructured data search by integrating semantic search techniques into backend services."
+  stack: "Python, Flask, LangChain, Docker, Kubernetes, PostgreSQL"
+  links: {}
+
+- name: "TexMin Private AI Data Center & K8s Cluster"
+  bullets:
+  - "Built and maintained a private AI data center and Kubernetes cluster for AI and data processing workloads at TexMin."
+  - "Standardised Docker and Kubernetes deployment workflows for startups incubated under TexMin."
+  - "Improved reliability and scalability of AI pipelines by centralising compute and deployment tooling."
+  stack: "Docker, Kubernetes, Linux, GitHub Actions, Jenkins"
+  links: {}
+
+- name: "5G Drone Telemetry & Control Backend"
+  bullets:
+  - "Designed scalable backend infrastructure for drone communication and telemetry over public and private 5G networks."
+  - "Contributed to a 5G-enabled drone stack, optimising low-latency video streaming and control channels."
+  - "Integrated telemetry and control APIs with existing monitoring and automation tools used in production."
+  stack: "Backend APIs, Docker, Kubernetes, Linux, 5G"
+  links: {}
+
+- name: "In-app Engagement Games for Yaro"
+  bullets:
+  - "Built gamified in-app experiences for a teen investing app to increase user engagement and retention."
+  - "Integrated backend APIs with the core product to track game state, scores and rewards."
+  - "Collaborated with the product team to align game mechanics with learning and investing goals."
+  stack: "Node.js, Express.js, JavaScript, SQL"
+  links: {}
+
+- name: "KalaaVistaar Landing Page"
+  bullets:
+  - "Designed and developed the landing page for KalaaVistaar using HTML, CSS and JavaScript."
+  - "Implemented a responsive layout aligned with the brand’s visual direction."
+  - "Helped establish a strong foundation in modern web development and frontend best practices."
+  stack: "HTML, CSS, JavaScript"
+  links: {}
 
 contact:
   email: "shbhomsrivastav@gmail.com"
   github: "https://github.com/shbhom"
   linkedin: "https://linkedin.com/in/shubhom-srivastava"
+  phone: "+919354606883"

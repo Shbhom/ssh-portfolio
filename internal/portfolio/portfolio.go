@@ -30,6 +30,7 @@ type Contact struct {
 	Email    string `yaml:"email"`
 	GitHub   string `yaml:"github"`
 	LinkedIn string `yaml:"linkedin"`
+	Phone    string `yaml:"phone"`
 }
 
 type Portfolio struct {
