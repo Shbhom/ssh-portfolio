@@ -22,7 +22,6 @@ type model struct {
 	username string
 	keys     keyMap
 	help     help.Model
-	lastKey  string
 	quitting bool
 	loading  bool // will be true until progress bar completes
 	width    int
