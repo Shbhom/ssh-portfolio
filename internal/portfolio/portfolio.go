@@ -5,11 +5,13 @@ type Overview struct {
 	Bullets []string `yaml:"bullets"`
 }
 
-type ExperienceItem struct {
-	Company string   `yaml:"company"`
-	Role    string   `yaml:"role"`
-	Period  string   `yaml:"period"`
-	Bullets []string `yaml:"bullets"`
+type Experience struct {
+	Company  string   `yaml:"company"`
+	Role     string   `yaml:"role"`
+	Period   string   `yaml:"period"`
+	Location string   `yaml:"location"`
+	Bullets  []string `yaml:"bullets"`
+	Stack    string   `yaml:"stack"`
 }
 
 type Project struct {
@@ -25,10 +27,10 @@ type Contact struct {
 }
 
 type Portfolio struct {
-	Name       string           `yaml:"name"`
-	Tagline    string           `yaml:"tagline"`
-	Overview   Overview         `yaml:"overview"`
-	Experience []ExperienceItem `yaml:"experience"`
-	Projects   []Project        `yaml:"projects"`
-	Contact    Contact          `yaml:"contact"`
+	Name        string       `yaml:"name"`
+	Tagline     string       `yaml:"tagline"`
+	Overview    Overview     `yaml:"overview"`
+	Experiences []Experience `yaml:"experience"`
+	Projects    []Project    `yaml:"projects"`
+	Contact     Contact      `yaml:"contact"`
 }

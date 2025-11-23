@@ -9,6 +9,14 @@ import (
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
+		if m.activeTab == 1 { // assuming 0=Overview, 1=Experience
+			switch msg.String() {
+			case "j", "down":
+				m.expList.NextPage()
+			case "k", "up":
+				m.expList.PrevPage()
+			}
+		}
 		switch msg.String() {
 		case "1":
 			m.activeTab = 0

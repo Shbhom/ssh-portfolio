@@ -1,6 +1,9 @@
 package ui
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"github.com/charmbracelet/bubbles/paginator"
+	"github.com/charmbracelet/lipgloss"
+)
 
 var (
 	nameStyle = lipgloss.NewStyle().
@@ -41,3 +44,24 @@ var (
 			Foreground(lipgloss.Color("#555555")).
 			Align(lipgloss.Center)
 )
+
+func newPaginator(total int) paginator.Model {
+	p := paginator.New()
+	p.PerPage = 1
+	p.TotalPages = total
+	p.Type = paginator.Dots
+
+	active := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#FF75B7")). // pink
+		Bold(true).
+		Render("●")
+
+	inactive := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#555555")). // dim gray
+		Render("•")
+
+	p.ActiveDot = active
+	p.InactiveDot = inactive
+
+	return p
+}

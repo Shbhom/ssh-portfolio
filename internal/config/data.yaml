@@ -1,27 +1,78 @@
 name: "Shubhom Srivastava"
-tagline: "Backend & DevOps — structured systems, ugly servers, clean interfaces."
+tagline: "Backend Engineer | Building scalable APIs and data infrastructure for startups"
 
 overview:
   intro: >
-    I build backend systems and infrastructure for products that need to be reliable under ugly, real-world conditions.
+    Backend developer with 2+ years of experience building production systems for startups in finance, drones and crypto forensics.
+
+    I design and ship ETL pipelines, RAG chatbots, archival crypto nodes and high-throughput APIs, mostly in Go and TypeScript, running on Docker and Kubernetes in both cloud and on-prem environments.
 
   bullets:
-  - "Backend: Go, Python, REST/gRPC, Postgres, Redis"
-  - "Infra: Linux, Docker, CI/CD, on-prem + cloud"
-  - "Interests: systems design, observability, terminal UIs"
+  - "Languages: Go, JavaScript / TypeScript, Python, SQL, Bash"
+  - "Framework: Express, Nestjs, Flask, FastAPI, GoFiber, Jest, LangChain"
+  - "Technologies & Tools: Docker, Kubernetes, Linux, GitHub Actions, Message Queues"
+  - "Databases & vector stores: PostgreSQL, MongoDB, Redis, Pinecone, SQLite, ChromaDB"
 
 experience:
-- company: "Hornet Decentratech"
+- company: "Hornet Decentratech Pvt Ltd"
   role: "Backend Developer"
-  period: "May 2025 — present"
+  period: "May 2025 — Present"
+  location: "Kolkata, West Bengal, India"
   bullets:
-  - "Designed APIs and infra for drone + data platforms"
-  - "Worked with on-prem + cloud ML workloads"
+  - "Building an omnichannel Go-based ETL pipeline to continuously extract and normalize crypto address data, serving as a single source of truth for downstream forensics analysis."
+  - "Set up and operated Ethereum and Tron archival nodes on both local infrastructure and cloud servers, enabling full on-chain history access for analytics and monitoring."
+  - "Deployed and maintained a production-ready Ethereum indexer on cloud servers, providing low-latency, query-optimized access to on-chain data for internal tools."
+  stack: "Go, Linux, Ethereum, Tron, Jenkins"
+
 - company: "Vyomchara"
-  role: "Backend Development Intern"
-  period: "July 2024 — April 2025"
+  role: "Backend Developer"
+  period: "July 2024 — May 2025"
+  location: "IIT(ISM), Dhanbad, Jharkhand"
   bullets:
-  - "…"
+  - "Developed a RAG-based chatbot with Flask and LangChain, boosting accuracy by 70%+ and reducing response time to 4s, improving unstructured data handling."
+  - "Designed and deployed scalable backend infrastructure for drone communication and telemetry, ensuring secure low-latency operations over 5G networks."
+  - "Optimized drone-camera API integration, enhancing real-time surveillance capabilities."
+  stack: "Python, Flask, LangChain, Docker, Kubernetes, Linux, 5G"
+
+- company: "Texmin Foundation"
+  role: "Backend Developer"
+  period: "May 2024 — July 2024"
+  location: "IIT(ISM), Dhanbad, Jharkhand"
+  bullets:
+  - "Deployed and optimized TexMin’s private AI data center and Kubernetes cluster, enhancing computational efficiency for AI-driven projects."
+  - "Collaborated with multiple startups incubated under Texmin to design, develop and integrate diverse software solutions tailored to client needs."
+  - "Streamlined deployments and environments for AI and data workloads using Docker and Kubernetes."
+  stack: "Docker, Kubernetes, Linux, AI infrastructure"
+
+- company: "DataKnobs"
+  role: "Back-end Developer"
+  period: "August 2023 — May 2024"
+  location: "Remote"
+  bullets:
+  - "Re-designed and upgraded the chatbot API for precise context retrieval, improving overall chatbot accuracy."
+  - "Built a RAG-based chatbot backend using Flask, LangChain and Python, plus an event-driven ETL pipeline with message queues to continuously refresh the knowledge base in near real time."
+  - "Automated Docker image builds and deployments with GitHub Actions to streamline backend releases."
+  stack: "Python, Flask, LangChain, Message Queues, Docker, GitHub Actions"
+
+- company: "Yaro – Investing App for Teenagers"
+  role: "Back End Development Intern"
+  period: "December 2022 — February 2023"
+  location: "Remote"
+  bullets:
+  - "Developed engaging in-app games integrated into the investing app, significantly increasing user engagement and retention."
+  - "Tested backend APIs using Postman and Jest to ensure reliability, security and scalability."
+  - "Gained hands-on experience with Node.js, Express.js, API development and database design."
+  stack: "Node.js, Express.js, JavaScript, SQL databases, Postman, Jest"
+
+- company: "KalaaVistaar"
+  role: "Web Developer"
+  period: "July 2022 — August 2022"
+  location: "Remote"
+  bullets:
+  - "Designed and built the startup landing page using HTML, CSS and JavaScript."
+  - "Collaborated with the founding team to translate brand requirements into a clean, responsive web experience."
+  - "Built a strong foundation in modern web development and frontend best practices."
+  stack: "HTML, CSS, JavaScript"
 
 projects:
 - name: "SSH Portfolio TUI"

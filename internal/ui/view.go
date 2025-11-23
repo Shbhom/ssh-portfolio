@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
@@ -27,9 +28,9 @@ func (m model) viewTabContent() string {
 
 	switch m.activeTab {
 	case 0:
-		text = m.viewOverview()
+		text = contentStyle.Render(m.viewOverview())
 	case 1:
-		text = "Experience tab — placeholder content."
+		text = contentStyle.Render(m.viewExperience())
 	case 2:
 		text = "Projects tab — placeholder content."
 	case 3:
@@ -41,6 +42,12 @@ func (m model) viewTabContent() string {
 
 func (m model) viewFooter() string {
 	helpLine := "h/← & l/→: switch tabs  •  1–4: jump to tab  •  q: quit"
+	switch m.activeTab {
+	case 1:
+		helpLine += "  •  j/k or ↑/↓: switch experience"
+	case 2:
+		helpLine += "  •  j/k or ↑/↓: switch project"
+	}
 	return footerStyle.Render(helpLine)
 }
 
@@ -171,10 +178,10 @@ func (m model) viewOverview() string {
 	var socialParts []string
 
 	if p.Contact.GitHub != "" {
-		socialParts = append(socialParts, termLink("Github", p.Contact.GitHub))
+		socialParts = append(socialParts, termLink("GitHub", p.Contact.GitHub))
 	}
 	if p.Contact.LinkedIn != "" {
-		socialParts = append(socialParts, termLink("Linkedin", p.Contact.LinkedIn))
+		socialParts = append(socialParts, termLink("LinkedIn", p.Contact.LinkedIn))
 	}
 	if p.Contact.Email != "" {
 		socialParts = append(socialParts, termLink("Email", "mailto:"+p.Contact.Email))
@@ -185,6 +192,75 @@ func (m model) viewOverview() string {
 		socialLine := strings.Join(socialParts, "  ·  ")
 		lines = append(lines, centerInContent(socialLine))
 	}
+
+	return strings.Join(lines, "\n")
+}
+
+func (m model) viewExperience() string {
+	if m.portfolio == nil || len(m.portfolio.Experiences) == 0 {
+		return "No experience data yet."
+	}
+
+	exps := m.portfolio.Experiences
+	idx := m.expList.Page
+	if idx < 0 {
+		idx = 0
+	}
+	if idx >= len(exps) {
+		idx = len(exps) - 1
+	}
+	exp := exps[idx]
+
+	var lines []string
+
+	// Title line: Company — Role
+	header := fmt.Sprintf("%s — %s", exp.Company, exp.Role)
+	header = lipgloss.NewStyle().Bold(true).Render(header)
+	lines = append(lines, header)
+
+	// Period / location
+	var metaParts []string
+	if exp.Period != "" {
+		metaParts = append(metaParts, exp.Period)
+	}
+	if exp.Location != "" {
+		metaParts = append(metaParts, exp.Location)
+	}
+	if len(metaParts) > 0 {
+		meta := lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#AAAAAA")).
+			Render(strings.Join(metaParts, " · "))
+		lines = append(lines, meta)
+	}
+
+	lines = append(lines, "") // blank line
+
+	// Bullets (cap at 3 for readability)
+	maxBullets := 3
+	for i, b := range exp.Bullets {
+		if i >= maxBullets {
+			break
+		}
+		b = strings.TrimSpace(b)
+		if b == "" {
+			continue
+		}
+		lines = append(lines, "• "+b)
+	}
+
+	// Stack line
+	if strings.TrimSpace(exp.Stack) != "" {
+		lines = append(lines, "")
+		stackLine := "Stack: " + exp.Stack
+		lines = append(lines, stackLine)
+	}
+
+	// Paginator indicator at bottom
+	lines = append(lines, "")
+	pagerLine := fmt.Sprintf("(%d/%d)", idx+1, len(exps))
+	// use paginator's dots + our numeric info
+	pagerView := m.expList.View()
+	lines = append(lines, pagerLine+"  "+pagerView)
 
 	return strings.Join(lines, "\n")
 }
