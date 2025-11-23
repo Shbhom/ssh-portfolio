@@ -116,12 +116,15 @@ type model struct {
 	lastKey    string
 	quitting   bool
 	loading    bool // will be true until progress bar completes
+	width      int
+	height     int
 }
 
 func newModel(userName string) model {
 	prog := progress.New(progress.WithScaledGradient("#FF7CCB", "#FDFF8C"))
 
 	return model{
+		username:   userName,
 		keys:       keys,
 		progress:   prog,
 		help:       help.New(),
@@ -153,6 +156,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case tea.WindowSizeMsg:
+		m.width = msg.Width // 👈 store
+		m.height = msg.Height
 		m.progress.Width = msg.Width - padding*2 - 4
 		if m.progress.Width > maxWidth {
 			m.progress.Width = maxWidth
@@ -160,7 +165,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 
 	case tickMsg:
-		m.prog_perc += 0.25
+		m.prog_perc += 0.10
 		if m.prog_perc > 1.0 {
 			m.prog_perc = 1.0
 			m.loading = false // 👈 progress finished
@@ -176,20 +181,43 @@ func (m model) View() string {
 		return "Bye!\n"
 	}
 
-	// Phase 1: only progress animation
+	var content string
+
 	if m.loading {
-		return m.progress.ViewAs(m.prog_perc) + "\n"
+		// Loading phase: only progress bar
+		content = m.progress.ViewAs(m.prog_perc)
+	} else {
+		// Normal phase: progress (optional), text, help
+		helpView := m.help.View(m.keys)
+
+		body := fmt.Sprintf(
+			"Welcome to your terminal.about.me stub, %s!\n\n"+
+				"This is a Bubble Tea TUI running over Wish.\n\n"+
+				"Press 'q' to exit.\n",
+			m.username,
+		)
+
+		content = lipgloss.JoinVertical(
+			lipgloss.Left,
+			body,
+			"",
+			helpView,
+		)
 	}
 
-	// Phase 2: normal content + help
-	helpView := m.help.View(m.keys)
+	// If we don't know the size yet, just return the raw content
+	if m.width == 0 || m.height == 0 {
+		return content + "\n"
+	}
 
-	return m.progress.ViewAs(1.0) + fmt.Sprintf(
-		"\nWelcome to your terminal.about.me stub, %s!\n\n"+
-			"This is a Bubble Tea TUI running over Wish.\n\n"+
-			"Press 'q' to exit.\n",
-		m.username,
-	) + helpView
+	// Center the content in the available space
+	return lipgloss.Place(
+		m.width,
+		m.height,
+		lipgloss.Center, // horizontal
+		lipgloss.Center, // vertical
+		content,
+	)
 }
 
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
@@ -205,7 +233,7 @@ func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 }
 
 func tickCmd() tea.Cmd {
-	return tea.Tick(time.Second, func(t time.Time) tea.Msg {
+	return tea.Tick(70*time.Millisecond, func(t time.Time) tea.Msg {
 		return tickMsg(t)
 	})
 }
