@@ -3,25 +3,37 @@ package ui
 import (
 	"time"
 
-	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch {
-		case key.Matches(msg, m.keys.Up):
-			m.lastKey = "↑"
-		case key.Matches(msg, m.keys.Down):
-			m.lastKey = "↓"
-		case key.Matches(msg, m.keys.Left):
-			m.lastKey = "←"
-		case key.Matches(msg, m.keys.Right):
-			m.lastKey = "→"
-		case key.Matches(msg, m.keys.Help):
+		switch msg.String() {
+		case "1":
+			m.activeTab = 0
+		case "2":
+			m.activeTab = 1
+		case "3":
+			m.activeTab = 2
+		case "4":
+			m.activeTab = 3
+
+		case "left", "h":
+			if m.activeTab == 0 {
+				m.activeTab = 3
+			} else {
+				m.activeTab--
+			}
+		case "right", "l":
+			if m.activeTab == 3 {
+				m.activeTab = 0
+			} else {
+				m.activeTab++
+			}
+		case "?":
 			m.help.ShowAll = !m.help.ShowAll
-		case key.Matches(msg, m.keys.Quit):
+		case "q", "esc", "ctrl+c":
 			m.quitting = true
 			return m, tea.Quit
 		}

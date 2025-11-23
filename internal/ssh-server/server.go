@@ -1,6 +1,9 @@
 package sshserver
 
 import (
+	"path"
+
+	"github.com/Shbhom/ssh-portfolio/internal/portfolio"
 	"github.com/Shbhom/ssh-portfolio/internal/ui"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/ssh"
@@ -26,7 +29,12 @@ func New(addr, hostKeyPath string) (*ssh.Server, error) {
 }
 
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
-	m := ui.NewModel(s.User())
+
+	p, err := portfolio.Load(path.Join("internal/config/data.yaml"))
+	if err != nil {
+		panic(err)
+	}
+	m := ui.NewModel(s.User(), p)
 
 	opts := []tea.ProgramOption{
 		tea.WithInput(s),

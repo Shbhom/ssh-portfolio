@@ -6,6 +6,44 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+func (m model) viewTabs() string {
+	labels := []string{"Overview", "Experience", "Projects", "Contact"}
+	var rendered []string
+
+	for i, label := range labels {
+		if i == m.activeTab {
+			rendered = append(rendered, tabActiveStyle.Render(label))
+		} else {
+			rendered = append(rendered, tabInactiveStyle.Render(label))
+		}
+	}
+
+	row := lipgloss.JoinHorizontal(lipgloss.Left, rendered...)
+	return tabsRowStyle.Render(row)
+}
+
+func (m model) viewTabContent() string {
+	var text string
+
+	switch m.activeTab {
+	case 0:
+		text = fmt.Sprintf("%s\n%s\n%s\n", m.portfolio.Name, m.portfolio.Tagline, m.portfolio.Overview.Intro)
+	case 1:
+		text = "Experience tab — placeholder content."
+	case 2:
+		text = "Projects tab — placeholder content."
+	case 3:
+		text = "Contact tab — placeholder content."
+	}
+
+	return contentStyle.Render(text)
+}
+
+func (m model) viewFooter() string {
+	helpLine := "h/← & l/→: switch tabs  •  1–4: jump to tab  •  q: quit"
+	return footerStyle.Render(helpLine)
+}
+
 func (m model) View() string {
 	if m.quitting {
 		return "Bye!\n"
@@ -25,7 +63,7 @@ func (m model) View() string {
 
 		visible := m.introText[:m.typedChars]
 
-		// Thicker cursor: full block "█" (or "▋"/"▌" if you want slimmer)
+		// Thicker cursor: full block "█"
 		cursorChar := ""
 		if m.cursorOn {
 			cursorChar = "█"
@@ -41,22 +79,21 @@ func (m model) View() string {
 		line := styledName + styledCursor
 		content = line
 	} else {
-		// Normal phase: main content + help
-		helpView := m.help.View(m.keys)
+		// 🔹 Main portfolio card view
 
-		body := fmt.Sprintf(
-			"Welcome to your terminal.about.me stub, %s!\n\n"+
-				"This is a Bubble Tea TUI running over Wish.\n\n"+
-				"Press 'q' to exit.\n",
-			m.username,
-		)
+		tabContent := m.viewTabContent()
+		tabsRow := m.viewTabs()
+		footer := m.viewFooter()
 
-		content = lipgloss.JoinVertical(
+		body := lipgloss.JoinVertical(
 			lipgloss.Left,
-			body,
+			tabContent,
 			"",
-			helpView,
+			tabsRow,
+			footer,
 		)
+
+		content = cardStyle.Render(body)
 	}
 
 	// If we don't know the size yet, just return the raw content.
@@ -64,7 +101,7 @@ func (m model) View() string {
 		return content + "\n"
 	}
 
-	// Center the content in the available space
+	// Center the content (intro or card) in the available space
 	return lipgloss.Place(
 		m.width,
 		m.height,

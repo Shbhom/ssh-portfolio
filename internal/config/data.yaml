@@ -1,0 +1,37 @@
+name: "Shubhom Srivastava"
+tagline: "Backend & DevOps — structured systems, ugly servers, clean interfaces."
+
+overview:
+  intro: >
+    I build backend systems and infrastructure for products that need to be reliable under ugly, real-world conditions.
+
+  bullets:
+  - "Backend: Go, Python, REST/gRPC, Postgres, Redis"
+  - "Infra: Linux, Docker, CI/CD, on-prem + cloud"
+  - "Interests: systems design, observability, terminal UIs"
+
+experience:
+- company: "Hornet Decentratech"
+  role: "Backend Developer"
+  period: "May 2025 — present"
+  bullets:
+  - "Designed APIs and infra for drone + data platforms"
+  - "Worked with on-prem + cloud ML workloads"
+- company: "Vyomchara"
+  role: "Backend Development Intern"
+  period: "July 2024 — April 2025"
+  bullets:
+  - "…"
+
+projects:
+- name: "SSH Portfolio TUI"
+  tags: [ "Go", "Wish", "Bubble Tea" ]
+  summary: "Terminal-based interactive portfolio over SSH."
+- name: "Drone Platform Backend"
+  tags: [ "Go", "Postgres", "Redis" ]
+  summary: "Backend for drone telemetry and control."
+
+contact:
+  email: "shbhomsrivastav@gmail.com"
+  github: "https://github.com/shbhom"
+  linkedin: "https://linkedin.com/in/shubhom-srivastava"

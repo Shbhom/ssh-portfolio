@@ -3,6 +3,7 @@ package ui
 import (
 	"time"
 
+	"github.com/Shbhom/ssh-portfolio/internal/portfolio"
 	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -10,6 +11,8 @@ import (
 
 const (
 	pauseTicks = 10 // ~1 second at 70ms per tick
+	appWidth   = 80
+	appHeight  = 20
 )
 
 type tickMsg time.Time
@@ -34,9 +37,12 @@ type model struct {
 	// styles
 	nameStyle   lipgloss.Style
 	cursorStyle lipgloss.Style
+
+	activeTab int // 0 = Overview, 1 = Experience, 2 = Projects, 3 = Contact
+	portfolio *portfolio.Portfolio
 }
 
-func NewModel(userName string) model {
+func NewModel(userName string, p *portfolio.Portfolio) model {
 
 	return model{
 		username:   userName,
@@ -48,11 +54,12 @@ func NewModel(userName string) model {
 		cursorOn:   true,
 		phase:      0, // start in blink-only phase
 		frameCount: 0,
-		// Bold, slightly “bigger-feeling” name
-		nameStyle: nameStyle, // tweak color if you want
+		activeTab:  0,
 
-		// Thick, colored cursor
+		nameStyle: nameStyle,
+
 		cursorStyle: cursorStyle,
+		portfolio:   p,
 	}
 }
 
