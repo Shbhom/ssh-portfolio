@@ -19,7 +19,7 @@ import (
 type tickMsg time.Time
 
 const (
-	pauseTicks = 14 // ~1 second at 70ms per tick
+	pauseTicks = 10 // ~1 second at 70ms per tick
 )
 
 func main() {
@@ -105,15 +105,14 @@ var keys = keyMap{
 }
 
 type model struct {
-	username   string
-	keys       keyMap
-	help       help.Model
-	inputStyle lipgloss.Style
-	lastKey    string
-	quitting   bool
-	loading    bool // will be true until progress bar completes
-	width      int
-	height     int
+	username string
+	keys     keyMap
+	help     help.Model
+	lastKey  string
+	quitting bool
+	loading  bool // will be true until progress bar completes
+	width    int
+	height   int
 
 	// intro animation state
 	introText  string // "Shubhom Srivastava"
@@ -121,6 +120,10 @@ type model struct {
 	cursorOn   bool   // whether to draw the cursor
 	phase      int    // 0 = blink only, 1 = typing, 2 = done
 	frameCount int    // counts ticks to control timing
+
+	// styles
+	nameStyle   lipgloss.Style
+	cursorStyle lipgloss.Style
 }
 
 func newModel(userName string) model {
@@ -129,13 +132,21 @@ func newModel(userName string) model {
 		username:   userName,
 		keys:       keys,
 		help:       help.New(),
-		inputStyle: lipgloss.NewStyle().Foreground(lipgloss.Color("#FF75B7")),
 		loading:    true,
 		introText:  "Shubhom Srivastava", // what we’ll type out
 		typedChars: 0,
 		cursorOn:   true,
 		phase:      0, // start in blink-only phase
 		frameCount: 0,
+		// Bold, slightly “bigger-feeling” name
+		nameStyle: lipgloss.NewStyle().
+			Bold(true).
+			Foreground(lipgloss.Color("#FFD7FF")), // tweak color if you want
+
+		// Thick, colored cursor
+		cursorStyle: lipgloss.NewStyle().
+			Bold(true).
+			Foreground(lipgloss.Color("#FF5F87")),
 	}
 }
 
@@ -170,8 +181,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 
 	case tickMsg:
+		// If loading is already over, ignore further ticks
 		if !m.loading {
-			// If for some reason we still get ticks after loading, ignore them.
 			return m, nil
 		}
 
@@ -179,49 +190,44 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		switch m.phase {
 		case 0:
-			// Phase 0: just blink the cursor for a bit (~1.5s)
-			// Toggle cursor every 3 frames for a nice blink.
+			// Phase 0: blink-only cursor for a bit (~1.5s)
 			if m.frameCount%3 == 0 {
 				m.cursorOn = !m.cursorOn
 			}
-			// After ~20 frames, switch to typing phase.
-			if m.frameCount >= 14 {
+			if m.frameCount >= 20 {
 				m.phase = 1
 				m.frameCount = 0
 			}
 
 		case 1:
-			// Phase 1: type out the name and keep blinking the cursor.
-
-			// Blink cursor every 3 frames.
+			// Phase 1: typing the name
 			if m.frameCount%3 == 0 {
 				m.cursorOn = !m.cursorOn
 			}
 
-			// Every 2 frames, reveal one more character.
 			if m.frameCount%2 == 0 && m.typedChars < len(m.introText) {
 				m.typedChars++
 			}
 
-			// When we're done typing, end the loading phase.
 			if m.typedChars >= len(m.introText) {
+				// ✅ DO *NOT* set loading = false here
+				// just move to pause phase
 				m.phase = 2
-				m.loading = false
-				m.cursorOn = false // hide cursor once done
-				return m, nil      // stop scheduling ticks
+				m.frameCount = 0
+				m.cursorOn = true // keep cursor visible at end of name
 			}
 
 		case 2:
-			// Shouldn’t really be hit while loading is true, but just in case:
+			// Phase 2: pause with full name visible
 			if m.frameCount >= pauseTicks {
-				m.loading = false  // finally transition to normal mode
-				m.cursorOn = false // optional: hide cursor
+				// Now we finally end loading and switch to normal mode
+				m.loading = false
+				m.cursorOn = false // optional: hide cursor in normal mode
 				return m, nil      // stop scheduling ticks
 			}
-			return m, nil
 		}
 
-		// Keep the animation going.
+		// Keep animation running for phases 0, 1, and 2
 		return m, tickCmd()
 	}
 	return m, nil
@@ -237,7 +243,6 @@ func (m model) View() string {
 	if m.loading {
 		// Intro phase: typewriter animation for "Shubhom Srivastava"
 
-		// Clamp typedChars just in case
 		if m.typedChars < 0 {
 			m.typedChars = 0
 		}
@@ -247,12 +252,20 @@ func (m model) View() string {
 
 		visible := m.introText[:m.typedChars]
 
-		cursor := ""
+		// Thicker cursor: full block "█" (or "▋"/"▌" if you want slimmer)
+		cursorChar := ""
 		if m.cursorOn {
-			cursor = "▌" // you can change to "_" or "|" if you prefer
+			cursorChar = "█"
 		}
 
-		line := visible + cursor
+		// Style the name + cursor separately
+		styledName := m.nameStyle.Render(visible)
+		styledCursor := ""
+		if cursorChar != "" {
+			styledCursor = m.cursorStyle.Render(cursorChar)
+		}
+
+		line := styledName + styledCursor
 		content = line
 	} else {
 		// Normal phase: main content + help
@@ -301,7 +314,7 @@ func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 }
 
 func tickCmd() tea.Cmd {
-	return tea.Tick(70*time.Millisecond, func(t time.Time) tea.Msg {
+	return tea.Tick(60*time.Millisecond, func(t time.Time) tea.Msg {
 		return tickMsg(t)
 	})
 }
